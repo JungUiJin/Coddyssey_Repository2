@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>우주 해적 길드 - Space Pirates Guild</title>
+  <style>
+    :root {
+      --bg: #0a0f1e;
+      --card: #101a33;
+      --ink: #e6ebff;
+      --muted: #a6b0d8;
+      --accent: #7aa2ff;
+      --accent-2: #00d4ff;
+    }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif; }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 24px; }
+    header { display: grid; grid-template-columns: 64px 1fr auto; gap: 16px; align-items: center; }
+    .logo { width: 64px; height: 64px; }
+    .title h1 { margin: 0; font-size: 28px; }
+    .title p { margin: 2px 0 0 0; color: var(--muted); }
+    .cta a { display: inline-block; padding: 10px 14px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #06122b; border-radius: 8px; font-weight: 700; text-decoration: none; }
+    .card { background: linear-gradient(180deg, #0f1b34 0%, #0b1327 100%); border: 1px solid rgba(122,162,255,.15); border-radius: 14px; padding: 18px 18px 4px 18px; margin-top: 18px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+    .footer { color: var(--muted); margin-top: 22px; font-size: 13px; }
+    svg { display:block; width:100%; height:auto; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <svg class="logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Space Pirate Emblem">
+        <defs>
+          <radialGradient id="g" cx="50%" cy="40%" r="60%">
+            <stop offset="0%" stop-color="#7aa2ff"/>
+            <stop offset="100%" stop-color="#00d4ff"/>
+          </radialGradient>
+        </defs>
+        <circle cx="32" cy="32" r="20" fill="url(#g)" />
+        <g fill="#06122b">
+          <circle cx="26" cy="28" r="3"/>
+          <circle cx="38" cy="28" r="3"/>
+          <rect x="24" y="36" width="16" height="3" rx="1.5"/>
+        </g>
+        <ellipse cx="32" cy="40" rx="26" ry="6" fill="rgba(122,162,255,.25)"/>
+      </svg>
+      <div class="title">
+        <h1>우주 해적 길드</h1>
+        <p>광활한 성운 너머, 전파를 타고 전설이 온다.</p>
+      </div>
+      <div class="cta"><a href="/stats">요청 통계 보기</a></div>
+    </header>
+
+    <section class="card">
+      <h2>소개</h2>
+      <p>우주 해적은 ‘자유’와 ‘연대’를 신조로 삼는 탐험가다. 우리는 잊힌 항성로를 복원하고, 잃어버린 문명의 흔적을 수집하며, 부당한 세금엔 당당히 저항한다. 이 홈페이지는 길드의 공개 항해일지이자, 신규 승무원 모집 창구다.</p>
+    </section>
+
+    <section class="card">
+      <h2>함대</h2>
+      <div class="grid">
+        <svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" aria-label="Neon Star Map">
+          <rect width="600" height="300" fill="#0b1327"/>
+          <g stroke="#00d4ff" stroke-width="1" fill="none" opacity=".8">
+            <path d="M20 260 C120 200, 240 240, 360 180 S520 120, 580 60" />
+            <path d="M30 210 Q120 140, 240 160 T540 120" opacity=".6"/>
+          </g>
+          <g fill="#7aa2ff">
+            <circle cx="80" cy="220" r="3"/><circle cx="180" cy="190" r="4"/>
+            <circle cx="260" cy="150" r="3"/><circle cx="320" cy="170" r="4"/>
+            <circle cx="420" cy="130" r="3"/><circle cx="520" cy="90" r="5"/>
+          </g>
+          <text x="20" y="32" fill="#a6b0d8" font-size="18">길드 항성도</text>
+        </svg>
+
+        <svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" aria-label="Flagship Isometric">
+          <defs>
+            <linearGradient id="hull" x1="0" x2="1">
+              <stop offset="0%" stop-color="#7aa2ff"/><stop offset="100%" stop-color="#00d4ff"/>
+            </linearGradient>
+          </defs>
+          <rect width="600" height="300" fill="#0b1327"/>
+          <g transform="translate(120,80)">
+            <polygon points="0,60 120,0 360,0 240,60" fill="url(#hull)" opacity=".9"/>
+            <polygon points="0,60 240,60 240,120 0,120" fill="#0e1a35"/>
+            <polygon points="240,60 360,0 360,60 240,120" fill="#0b1530"/>
+            <rect x="40" y="80" width="60" height="8" fill="#7aa2ff" opacity=".8" />
+            <rect x="110" y="80" width="60" height="8" fill="#7aa2ff" opacity=".6" />
+            <rect x="180" y="80" width="60" height="8" fill="#7aa2ff" opacity=".4" />
+          </g>
+          <text x="24" y="32" fill="#a6b0d8" font-size="18">기함 ‘노던라이트’</text>
+        </svg>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>승무원 지원</h2>
+      <p>기본 요건: 호기심, 팀워크, 그리고 약간의 뻔뻔함. 항해 기록이 없더라도 환영한다. 입단 문의는 <em>함교</em>로.</p>
+      <p>팁: <code>/stats</code> 페이지에서 서버가 받은 요청 수를 확인해 보라. 우주 해적에게 분석 역량은 생존 스킬이다.</p>
+    </section>
+
+    <p class="footer">© 2025 Space Pirates Guild. 모든 항로는 미지로 열린다.</p>
+  </div>
+</body>
+</html>

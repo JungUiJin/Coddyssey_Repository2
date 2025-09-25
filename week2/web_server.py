@@ -130,7 +130,7 @@ class SimpleHandler(http.server.SimpleHTTPRequestHandler):
       {rows}
     </tbody>
   </table>
-  <p><a href="/">← 홈으로</a></p>
+  <p><a href="/index.html">← 홈으로</a></p>
 </body>
 </html>"""
         html = html_tpl.format(total=total, rows=table_html)

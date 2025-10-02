@@ -10,7 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
 NAVER_ID = "poochin74"
-NAVER_PW = "dufma7274@@"
+NAVER_PW = ""
 
 LOGIN_URL = "https://nid.naver.com/nidlogin.login?mode=form&url=https://www.naver.com/"
 MAIL_URL = "https://mail.naver.com/"

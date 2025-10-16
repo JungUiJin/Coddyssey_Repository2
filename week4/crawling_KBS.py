@@ -52,7 +52,7 @@ def main():
 
         # 로그인 입력 필드 대기
         id_box = wait_css(driver, "input#id", timeout=12)
-        pw_box = wait_css(driver, "input#pw", timeout=12)
+        pw_box = wait_css(driver, "input#pw", timeou3t=12)
 
         id_box.clear()
         id_box.send_keys(NAVER_ID)

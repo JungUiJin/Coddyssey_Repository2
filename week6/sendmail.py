@@ -55,6 +55,7 @@ HTML_BODY = """
             <p>
                 **한송희 박사님의 생존 소식에 모두가 감동했습니다.** 박사님을 구출하기 위한 가장 효과적인 메시지 전달 방안을 마련하는 것이 급선무입니다. 이 메일은 그 테스트의 일환입니다.
             </p>
+            <img src="https://mblogthumb-phinf.pstatic.net/MjAxNzA2MTlfMzYg/MDAxNDk3ODAxMjAwMjY4.PRTZrdUEDzPu-zHlcONeGgu8Z5-KkreyNOSWMsoSN9cg.U5oZeAbsVUH4OqcjytyhxlobsE-5oCE1vp-s0QD7ovcg.JPEG.kusshand_official/170614.jpg?type=w800"/>
         </div>
         <div class='footer'>
             <p>From: Dr. Han's Support Team</p>
@@ -98,7 +99,7 @@ def get_recipient_list(csv_file_name='C:\\Coddyssey_Repository2\\week6\\mail_tar
 
 
 def add_attachment_to_msg(msg, file_path):
-    """첨부 파일을 EmailMessage 객체에 추가하는 내부 로직 (재사용을 위해 분리)"""
+    """첨부 파일을 EmailMessage 객체에 추가하는 내부 로직"""
     attachment_path = Path(file_path)
     if attachment_path.exists() and attachment_path.is_file():
         ctype, encoding = mimetypes.guess_type(attachment_path)

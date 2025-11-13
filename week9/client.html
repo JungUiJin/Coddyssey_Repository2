@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastAPI Todo 클라이언트</title>
+    <style>
+        body { 
+            font-family: sans-serif; 
+            margin: 20px; 
+            background-color: #f4f4f4;
+        }
+        h1, h2 { border-bottom: 2px solid #ccc; padding-bottom: 5px; }
+        fieldset { 
+            margin-bottom: 20px; 
+            border: 1px solid #ccc; 
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        legend { font-weight: bold; font-size: 1.2em; }
+        input[type="text"], input[type="number"] { 
+            margin-right: 10px; 
+            padding: 5px;
+            min-width: 200px;
+        }
+        button { padding: 5px 10px; cursor: pointer; }
+        ul { list-style-type: none; padding-left: 0; }
+        li { 
+            background-color: #eee; 
+            margin-bottom: 5px; 
+            padding: 10px; 
+            border-radius: 3px;
+        }
+        li.completed { 
+            text-decoration: line-through; 
+            background-color: #d8ffd8; 
+        }
+        pre {
+            background-color: #222;
+            color: #0f0;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            min-height: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Todo API 테스트 클라이언트</h1>
+
+    <fieldset>
+        <legend>📝 전체 할 일 목록</legend>
+        <button id="btn-fetch-all">모든 할 일 가져오기</button>
+        <ul id="todo-list">
+            </ul>
+    </fieldset>
+
+    <fieldset>
+        <legend>➕ 새 할 일 추가</legend>
+        <form id="form-add">
+            <input type="text" id="input-task" placeholder="할 일 내용..." required>
+            <button type="submit">추가</button>
+        </form>
+    </fieldset>
+
+    <fieldset>
+        <legend>🆔 ID로 항목 작업하기</legend>
+        <input type="number" id="input-item-id" placeholder="ID (예: 1)" min="1">
+        <button id="btn-get-single">개별 조회</button>
+        <button id="btn-delete">삭제</button>
+        
+        <hr>
+        
+        <form id="form-update">
+            <strong>위 ID의 항목 수정:</strong><br>
+            <input type="text" id="input-update-task" placeholder="새 할 일 내용" required>
+            <label>
+                <input type="checkbox" id="input-update-completed"> 완료됨
+            </label>
+            <button type="submit">수정</button>
+        </form>
+    </fieldset>
+
+    <fieldset>
+        <legend>📡 API 응답 결과</legend>
+        <pre id="results">여기에 API 응답 JSON이 표시됩니다.</pre>
+    </fieldset>
+
+<script>
+    const BASE_URL = 'http://127.0.0.1:8000/api';
+    const listEl = document.getElementById('todo-list');
+    const resultsEl = document.getElementById('results');
+
+    // --- 헬퍼 함수 ---
+    function showResult(data) {
+        resultsEl.textContent = JSON.stringify(data, null, 2);
+    }
+    
+    function showError(error) {
+        console.error('API Error:', error);
+        resultsEl.textContent = `[오류 발생]\n${error.message}\n\nFastAPI 서버(uvicorn todo:app)가 실행 중인지, CORS 설정이 완료되었는지 확인하세요.`;
+    }
+
+    // --- API 호출 함수 ---
+
+    // (GET) /api/list - 모든 항목 조회
+    async function fetchAllTodos() {
+        try {
+            const response = await fetch(`${BASE_URL}/list`);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+            
+            // 목록 UI 업데이트
+            listEl.innerHTML = ''; // 기존 목록 비우기
+            data.todos.forEach(todo => {
+                const li = document.createElement('li');
+                li.textContent = `[ID: ${todo.id}] ${todo.task}`;
+                if (todo.completed) {
+                    li.className = 'completed';
+                }
+                listEl.appendChild(li);
+            });
+            showResult(data);
+        } catch (error) {
+            showError(error);
+        }
+    }
+
+    // (POST) /api/add - 항목 추가
+    async function addTodo(task) {
+        try {
+            const response = await fetch(`${BASE_URL}/add`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ task: task })
+            });
+            const data = await response.json();
+            showResult(data);
+            fetchAllTodos(); // 목록 새로고침
+        } catch (error) {
+            showError(error);
+        }
+    }
+
+    // (GET) /api/{item_id} - 개별 항목 조회
+    async function getSingleTodo(id) {
+        if (!id) {
+            alert('ID를 입력하세요.');
+            return;
+        }
+        try {
+            const response = await fetch(`${BASE_URL}/${id}`);
+            const data = await response.json();
+            
+            if (response.status === 404) {
+                showResult(data); // "Not found" 메시지 표시
+            } else {
+                showResult(data);
+                // 수정 폼에 데이터 채우기
+                document.getElementById('input-update-task').value = data.todo.task;
+                document.getElementById('input-update-completed').checked = data.todo.completed;
+            }
+        } catch (error) {
+            showError(error);
+        }
+    }
+
+    // (PUT) /api/{item_id} - 항목 수정
+    async function updateTodo(id, task, completed) {
+        if (!id) {
+            alert('먼저 수정할 ID를 입력하고 "개별 조회"를 눌러주세요.');
+            return;
+        }
+        try {
+            const response = await fetch(`${BASE_URL}/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ task: task, completed: completed })
+            });
+            const data = await response.json();
+            showResult(data);
+            fetchAllTodos(); // 목록 새로고침
+        } catch (error) {
+            showError(error);
+        }
+    }
+
+    // (DELETE) /api/{item_id} - 항목 삭제
+    async function deleteTodo(id) {
+        if (!id || !confirm(`정말로 ID ${id} 항목을 삭제하시겠습니까?`)) {
+            return;
+        }
+        try {
+            const response = await fetch(`${BASE_URL}/${id}`, {
+                method: 'DELETE'
+            });
+            
+            if (response.status === 204) { // No Content
+                showResult({ message: `ID ${id} 삭제 완료.` });
+                fetchAllTodos(); // 목록 새로고침
+            } else {
+                const data = await response.json(); // 404 등 오류 응답
+                showResult(data);
+            }
+        } catch (error) {
+            showError(error);
+        }
+    }
+
+    // --- 이벤트 리스너 연결 ---
+    
+    // 페이지 로드 시 목록 자동 로드
+    document.addEventListener('DOMContentLoaded', fetchAllTodos);
+
+    // 전체 목록 버튼
+    document.getElementById('btn-fetch-all').addEventListener('click', fetchAllTodos);
+
+    // 추가 폼
+    document.getElementById('form-add').addEventListener('submit', (e) => {
+        e.preventDefault(); // 폼 기본 제출 동작 방지
+        const taskInput = document.getElementById('input-task');
+        addTodo(taskInput.value);
+        taskInput.value = ''; // 입력창 비우기
+    });
+
+    // 개별 조회 버튼
+    document.getElementById('btn-get-single').addEventListener('click', () => {
+        const id = document.getElementById('input-item-id').value;
+        getSingleTodo(id);
+    });
+    
+    // 삭제 버튼
+    document.getElementById('btn-delete').addEventListener('click', () => {
+        const id = document.getElementById('input-item-id').value;
+        deleteTodo(id);
+    });
+
+    // 수정 폼
+    document.getElementById('form-update').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const id = document.getElementById('input-item-id').value;
+        const task = document.getElementById('input-update-task').value;
+        const completed = document.getElementById('input-update-completed').checked;
+        updateTodo(id, task, completed);
+    });
+
+</script>
+</body>
+</html>

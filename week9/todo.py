@@ -4,12 +4,28 @@ import csv
 import os
 from fastapi import FastAPI, APIRouter, HTTPException, status
 from typing import Dict, List, Any
-
+from fastapi.middleware.cors import CORSMiddleware
 # 1. model.py에서 TodoItem 모델 가져오기
 from model import TodoItem 
 
 # --- 기본 설정 ---
 app = FastAPI()
+
+origins = [
+    '*',  # 👈 모든 Origin을 허용합니다 (테스트용)
+    # "http://localhost",
+    # "http://localhost:8080",
+    # "null" # file:// 에서의 요청을 허용하려면 "null"을 추가
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=['*'],  # 👈 모든 HTTP 메소드 허용
+    allow_headers=['*'],  # 👈 모든 헤더 허용
+)
+
 router = APIRouter()
 
 # --- CSV 설정 ---
@@ -17,6 +33,8 @@ router = APIRouter()
 CSV_FILE = 'todos.csv'
 # CSV 파일의 헤더 (필드 이름)
 FIELDNAMES = ['id', 'task', 'completed']
+
+
 
 
 # --- CSV 헬퍼(Helper) 함수 ---

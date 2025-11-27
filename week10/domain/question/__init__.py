@@ -1,2 +1,2 @@
 # domain/question/__init__.py
-from .router import router  # noqa: F401
+from .question_router import router  # noqa: F401

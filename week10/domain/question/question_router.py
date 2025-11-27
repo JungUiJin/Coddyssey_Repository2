@@ -9,7 +9,7 @@ from database import get_db
 from models import Question
 
 router = APIRouter(
-    prefix='/questions',
+    prefix='/api/question',
     tags=['questions'],
 )
 
@@ -31,7 +31,7 @@ def question_to_dict(question: Question) -> dict:
     '/',
     summary='질문 목록 조회',
 )
-def read_questions(db: Session = Depends(get_db)) -> List[dict]:
+def question_list(db: Session = Depends(get_db)) -> List[dict]:
     questions = (
         db.query(Question)
         .order_by(Question.id.desc())
